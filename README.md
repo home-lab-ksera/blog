@@ -34,8 +34,6 @@ npm run build
 
 `npm run dev` では下書きも表示されます。
 
-## 基本的な使い方
-
 ## ディレクトリ構成
 
 ```
@@ -71,7 +69,7 @@ tags: ["タグ1", "タグ2"]
 
 ## CI
 
-GitHub Actionsでビルドチェックを実行します。
+`push.yml` が共通 publish workflow でイメージ（`npm run build` を含む）をビルドし、main への push で Harbor へ公開します。PR ではビルドのみ行います。
 
 ## ライセンス
 

@@ -4,7 +4,7 @@ Eleventyベースの個人ブログです。
 ### 開発サーバーの起動
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -67,9 +67,11 @@ tags: ["タグ1", "タグ2"]
 ---
 ```
 
-## CI
+## CI と配布
 
-`push.yml` が共通 publish workflow でイメージ（`npm run build` を含む）をビルドし、main への push で Harbor へ公開します。PR ではビルドのみ行います。
+`push.yml` が home-lab-k8s の共通 publish workflow でイメージ（`npm run build` を含む）をビルドし、main への push で Harbor へ公開します。PR ではビルドのみ行います。
+公開されたイメージは自動でクラスタに配布され、`https://blog.internal.qroksera.com`（LAN / Tailscale からのみ）で見られます。
+流れは [アプリ配布](https://github.com/home-lab-ksera/home-lab-k8s/blob/main/docs/app-delivery.md) を参照してください。
 
 ## ライセンス
 

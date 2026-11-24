@@ -1,3 +1,6 @@
+// サイト固有の設定はこの定数だけ。blog と cookLog はこれ以外の内容を揃えている。
+const SECTION = "tech";
+
 const MONTHS_JA = [
   "1月",
   "2月",
@@ -87,6 +90,7 @@ function buildArchives(items, section) {
 
 module.exports = function (eleventyConfig) {
   const isProd = process.env.ELEVENTY_ENV === "production";
+
   eleventyConfig.addPassthroughCopy({ static: "." });
 
   eleventyConfig.addFilter("readableDate", (value) => {
@@ -119,19 +123,19 @@ module.exports = function (eleventyConfig) {
     (items || []).slice().sort((a, b) => b.date - a.date)
   );
 
-  eleventyConfig.addCollection("tech", (collectionApi) =>
+  // 本番ビルドでは下書きを除く。
+  const sectionPosts = (collectionApi) =>
     collectionApi
-      .getFilteredByGlob("./content/tech/**/*.md")
-      .filter((item) => !item.data.draft || !isProd)
-      .sort((a, b) => b.date - a.date)
+      .getFilteredByGlob(`./content/${SECTION}/**/*.md`)
+      .filter((item) => !item.data.draft || !isProd);
+
+  eleventyConfig.addCollection(SECTION, (collectionApi) =>
+    sectionPosts(collectionApi).sort((a, b) => b.date - a.date)
   );
 
-  eleventyConfig.addCollection("techArchives", (collectionApi) => {
-    const items = collectionApi
-      .getFilteredByGlob("./content/tech/**/*.md")
-      .filter((item) => !item.data.draft || !isProd);
-    return buildArchives(items, "tech").entries;
-  });
+  eleventyConfig.addCollection(`${SECTION}Archives`, (collectionApi) =>
+    buildArchives(sectionPosts(collectionApi), SECTION).entries
+  );
 
   return {
     dir: {
